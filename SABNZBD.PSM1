@@ -11,7 +11,7 @@ function Get-SABQueueList ($hostname, $apikey, [switch]$ExcludeCompleted) {
       "Completed (%)"=[math]::Round(($job.mbleft / $job.mb) * 100) 
       "FileName"=$job.filename;
     }
-    
+
     $object = New-Object -TypeName psobject -Property $properties
 
     $Queue += $object
@@ -24,5 +24,7 @@ function Get-SABQueueList ($hostname, $apikey, [switch]$ExcludeCompleted) {
     $Queue
   }
 }
+
+
 
 Export-ModuleMember -Function 'Get-*'
