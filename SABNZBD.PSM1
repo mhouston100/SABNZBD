@@ -5,12 +5,13 @@ function Get-SABQueueList ($hostname, $apikey, [switch]$ExcludeCompleted) {
 
   Foreach ($job in $rawQueueDetails.queue.jobs.job)
   {
-    $properties=@{
-      "FileName"=$job.filename;
+    $properties=[ordered]@{
       "Size (MB)"=[math]::Round($job.mb);
       "Remaining (MB)"=[math]::Round($job.mbleft);
-      "Completed (%)"=[math]::Round(($job.mbleft / $job.mb) * 100)
+      "Completed (%)"=[math]::Round(($job.mbleft / $job.mb) * 100) 
+      "FileName"=$job.filename;
     }
+    
     $object = New-Object -TypeName psobject -Property $properties
 
     $Queue += $object
