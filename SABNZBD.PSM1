@@ -9,7 +9,7 @@ function Get-SABQueueList ($hostname, $apikey) {
       "FileName"=$job.filename;
       "Size (MB)"=[math]::Round($job.mb);
       "Remaining (MB)"=[math]::Round($job.mbleft);
-      "Completed(%)"=[math]::(($job.mbleft / $job.mb) * 100)
+      "Completed(%)"=[math]::Round(($job.mbleft / $job.mb) * 100)
     }
     $object = New-Object -TypeName psobject -Property $properties
 
