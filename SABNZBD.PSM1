@@ -1,4 +1,4 @@
-function Get-SABQueueList ($hostname, $apikey) {
+function Get-SABQueueList ($hostname, $apikey, [switch]$ExcludeCompleted) {
   $rawQueueDetails = $null
   $Queue = @()
   $rawQueueDetails = Invoke-RestMethod -URI "http://$hostName/api?mode=qstatus&output=xml&apikey=$apiKey"
@@ -16,7 +16,12 @@ function Get-SABQueueList ($hostname, $apikey) {
     $Queue += $object
   }
 
-  $Queue
+  if ($ExcludeCompleted){
+    $Queue | Where-Object -Property 'Completed (%)' -NE -Value 100
+  }
+  else {
+    $Queue
+  }
 }
 
 Export-ModuleMember -Function 'Get-*'
