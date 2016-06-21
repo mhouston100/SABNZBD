@@ -6,4 +6,7 @@ $rawQueueDetails = $null
 
 $rawQueueDetails = Invoke-RestMethod -URI "http://$hostName/api?mode=qstatus&output=xml&apikey=$apiKey"
 
-$rawQueueDetails.queue.jobs.job | Select Filename
+Foreach ($job in $rawQueueDetails.queue.jobs.job)
+{
+  $job
+}
