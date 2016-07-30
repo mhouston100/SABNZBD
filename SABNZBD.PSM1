@@ -11,7 +11,8 @@ Function Get-SABRawQueue ($hostname, $apikey){
 
   try {
 
-    $rawQueue.Data = Invoke-RestMethod -URI $URI -ErrorVariable $curError
+    $rawQueue.Data = Invoke-RestMethod -URI $URI -ErrorVariable $curError -ErrorAction Stop
+    if ($rawQueue.Data.result.error){$rawQueue.Error = $($rawQueue.Data.result.error)} 
 
   } # End Try
   catch {
@@ -19,23 +20,17 @@ Function Get-SABRawQueue ($hostname, $apikey){
     $rawQueue.Error = $curError
     
   } # End Catch
-  finally {
-
-    if ($rawQueue.result.error){$curError = $($rawQueue.result.error)}
-    $rawQueue.Error = $curError
-
-  } # End Finally
 
   $rawQueue
-}
+} # End Function Get-SABRawQueue
 
 function Get-SABQueueList ([string]$hostname, [string]$apikey, [switch]$ExcludeCompleted) {
-  
+
   $Queue = @()
   
   $rawQueue = Get-SABRawQueue $hostname $apikey
+  if ($rawQueue.Error){Write-Output "The following error occured : $($rawQueue.Error)";return} # End If
 
-  if ($rawQueue.Error){Write-Output "The following error occured : $($rawQueue.Error)";return}
   Foreach ($job in ($rawQueue).Data.queue.jobs.job)
   {
     $properties=[ordered]@{
@@ -47,7 +42,6 @@ function Get-SABQueueList ([string]$hostname, [string]$apikey, [switch]$ExcludeC
     }
 
     $Queue += New-Object -TypeName psobject -Property $properties
-
   }
 
   if ($ExcludeCompleted){
@@ -56,12 +50,12 @@ function Get-SABQueueList ([string]$hostname, [string]$apikey, [switch]$ExcludeC
   else {
     $Queue
   }
-}
+} # End Function Get-SABQueueList
 
 function Get-SABQueueTotals ([string]$hostname, [string]$apikey){
 
   $rawQueue = Get-SABRawQueue $hostname $apikey
-  if ($rawQueue.Error){Write-Output "The following error occured : $($rawQueue.Error)";return}
+  if ($rawQueue.Error){Write-Output "The following error occured : $($rawQueue.Error)";return} # End If
 
   $properties=[ordered]@{
     "No. Downloads"=[math]::Round(($rawQueue).Data.queue.noofslots_total);
@@ -69,10 +63,10 @@ function Get-SABQueueTotals ([string]$hostname, [string]$apikey){
     "Total (MB)"=[math]::Round(($rawQueue).Data.queue.mb);
     "Total Remaining (MB)"=[math]::Round(($rawQueue).Data.queue.mbleft);
     "Completed (%)"=[math]::Round(100 - ((($rawQueue).Data.queue.mbleft / ($rawQueue).Data.queue.mb) * 100))
-  }
+  } # End Properties
   $totals = New-Object -TypeName psobject -Property $properties
 
   $totals
-}
+} # End Function Get-SABQueueTotals
 
 Export-ModuleMember -Function 'Get-*'
