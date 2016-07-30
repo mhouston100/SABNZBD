@@ -1,10 +1,31 @@
 Function Get-SABRawQueue ($hostname, $apikey){
-  $rawQueueDetails = $null
+  $curError = $null
   $URI = "http://$hostName/api?mode=qstatus&output=xml&apikey=$apiKey"
 
-  $rawQueueDetails = Invoke-RestMethod -URI $URI
+  $properties=[ordered]@{
+    "Data"="";
+    "Error"=$curError
+  } # End Object Properties
+  
+  $rawQueueDetails = New-Object -TypeName psobject -Property $properties
 
-  if ($rawQueueDetails.result.error){Write-output "The following error occured : $($rawQueueDetails.result.error)";return}
+  try {
+
+    $rawQueueDetails.Data = Invoke-RestMethod -URI $URI -ErrorVariable $curError
+
+  } # End Try
+  catch 
+  {
+
+    $rawQueueDetails.Error = $curError
+    
+  } # End Catch
+  finally
+  {
+
+    if ($rawQueueDetails.result.error){$curError = $($rawQueueDetails.result.error)}
+
+  } # End Finally
 
   $rawQueueDetails
 }
@@ -13,7 +34,7 @@ function Get-SABQueueList ([string]$hostname, [string]$apikey, [switch]$ExcludeC
   
   $Queue = @()
   
-  Foreach ($job in (Get-SABRawQueue $hostname $apikey).queue.jobs.job)
+  Foreach ($job in (Get-SABRawQueue $hostname $apikey).Data.queue.jobs.job)
   {
     $properties=[ordered]@{
       "Size (MB)"=[math]::Round($job.mb);
@@ -35,7 +56,7 @@ function Get-SABQueueList ([string]$hostname, [string]$apikey, [switch]$ExcludeC
 }
 
 function Get-SABQueueTotals ([string]$hostname, [string]$apikey){
-  $rawQueueDetails = Get-SABRawQueue $hostname $apikey
+  $rawQueueDetails = (Get-SABRawQueue $hostname $apikey).Data
   $properties=[ordered]@{
     "No. Downloads"=[math]::Round($rawQueueDetails.queue.noofslots_total);
     "Speed (KB/s)"=[math]::Round($rawQueueDetails.queue.kbpersec);
