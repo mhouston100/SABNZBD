@@ -7,39 +7,42 @@ Function Get-SABRawQueue ($hostname, $apikey){
     "Error"=$curError
   } # End Object Properties
   
-  $rawQueueDetails = New-Object -TypeName psobject -Property $properties
+  $rawQueue = New-Object -TypeName psobject -Property $properties
 
   try {
 
-    $rawQueueDetails.Data = Invoke-RestMethod -URI $URI -ErrorVariable $curError
+    $rawQueue.Data = Invoke-RestMethod -URI $URI -ErrorVariable $curError
 
   } # End Try
-  catch 
-  {
+  catch {
 
-    $rawQueueDetails.Error = $curError
+    $rawQueue.Error = $curError
     
   } # End Catch
-  finally
-  {
+  finally {
 
-    if ($rawQueueDetails.result.error){$curError = $($rawQueueDetails.result.error)}
+    if ($rawQueue.result.error){$curError = $($rawQueue.result.error)}
+    $rawQueue.Error = $curError
 
   } # End Finally
 
-  $rawQueueDetails
+  $rawQueue
 }
 
 function Get-SABQueueList ([string]$hostname, [string]$apikey, [switch]$ExcludeCompleted) {
   
   $Queue = @()
   
-  Foreach ($job in (Get-SABRawQueue $hostname $apikey).Data.queue.jobs.job)
+  $rawQueue = Get-SABRawQueue $hostname $apikey
+
+  if ($rawQueue.Error){Write-Output "The following error occured : $($rawQueue.Error)";return}
+  Foreach ($job in ($rawQueue).Data.queue.jobs.job)
   {
     $properties=[ordered]@{
       "Size (MB)"=[math]::Round($job.mb);
       "Remaining (MB)"=[math]::Round($job.mbleft);
-      "Completed (%)"=[math]::Round(100 - (($job.mbleft / $job.mb) * 100)) 
+      "Completed (%)"=[math]::Round(100 - (($job.mbleft / $job.mb) * 100));
+      "Time Left"=$job.timeleft;
       "FileName"=$job.filename;
     }
 
@@ -56,13 +59,16 @@ function Get-SABQueueList ([string]$hostname, [string]$apikey, [switch]$ExcludeC
 }
 
 function Get-SABQueueTotals ([string]$hostname, [string]$apikey){
-  $rawQueueDetails = (Get-SABRawQueue $hostname $apikey).Data
+
+  $rawQueue = Get-SABRawQueue $hostname $apikey
+  if ($rawQueue.Error){Write-Output "The following error occured : $($rawQueue.Error)";return}
+
   $properties=[ordered]@{
-    "No. Downloads"=[math]::Round($rawQueueDetails.queue.noofslots_total);
-    "Speed (KB/s)"=[math]::Round($rawQueueDetails.queue.kbpersec);
-    "Total (MB)"=[math]::Round($rawQueueDetails.queue.mb);
-    "Total Remaining (MB)"=[math]::Round($rawQueueDetails.queue.mbleft);
-    "Completed (%)"=[math]::Round(100 - (($rawQueueDetails.queue.mbleft / $rawQueueDetails.queue.mb) * 100))
+    "No. Downloads"=[math]::Round(($rawQueue).Data.queue.noofslots_total);
+    "Speed (KB/s)"=[math]::Round(($rawQueue).Data.queue.kbpersec);
+    "Total (MB)"=[math]::Round(($rawQueue).Data.queue.mb);
+    "Total Remaining (MB)"=[math]::Round(($rawQueue).Data.queue.mbleft);
+    "Completed (%)"=[math]::Round(100 - ((($rawQueue).Data.queue.mbleft / ($rawQueue).Data.queue.mb) * 100))
   }
   $totals = New-Object -TypeName psobject -Property $properties
 
