@@ -2,12 +2,9 @@ function Get-SABQueueList ([string]$hostname, [string]$apikey, [switch]$ExcludeC
   $rawQueueDetails = $null
   $Queue = @()
 
-  Try {
-    $rawQueueDetails = Invoke-RestMethod -URI "http://$hostName/api?mode=qstatus&output=xml&apikey=$apiKey" -ErrorVariable $webErr
-  }
-  catch{
-    Write-Output "The following error occured: $webErr"
-  }
+  $rawQueueDetails = Invoke-RestMethod -URI "http://$hostName/api?mode=qstatus&output=xml&apikey=$apiKey"
+
+  if ($rawQueueDetails.result.error){Write-output "The following error occured : $($rawQueueDetails.result.error)";return}
 
   Foreach ($job in $rawQueueDetails.queue.jobs.job)
   {
