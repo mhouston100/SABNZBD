@@ -37,9 +37,11 @@ function Get-SABQueueList ([string]$hostname, [string]$apikey, [switch]$ExcludeC
 function Get-SABQueueTotals ([string]$hostname, [string]$apikey){
   $rawQueueDetails = Get-SABRawQueue $hostname $apikey
   $properties=[ordered]@{
+    "No. Downloads"=[math]::Round($rawQueueDetails.queue.noofslots_total);
+    "Speed (KB/s)"=[math]::Round($rawQueueDetails.queue.kbpersec);
     "Total (MB)"=[math]::Round($rawQueueDetails.queue.mb);
     "Total Remaining (MB)"=[math]::Round($rawQueueDetails.queue.mbleft);
-    "Speed (KB/s)"=[math]::Round($rawQueueDetails.queue.kbpersec)
+    "Completed (%)"=[math]::Round(100 - (($rawQueueDetails.queue.mbleft / $rawQueueDetails.queue.mb) * 100))
   }
   $totals = New-Object -TypeName psobject -Property $properties
 
