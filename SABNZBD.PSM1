@@ -1,20 +1,25 @@
-function Get-SABQueueList ($hostname, $apikey, [switch]$ExcludeCompleted) {
+function Get-SABQueueList ([string]$hostname, [string]$apikey, [switch]$ExcludeCompleted) {
   $rawQueueDetails = $null
   $Queue = @()
-  $rawQueueDetails = Invoke-RestMethod -URI "http://$hostName/api?mode=qstatus&output=xml&apikey=$apiKey"
+
+  Try {
+    $rawQueueDetails = Invoke-RestMethod -URI "http://$hostName/api?mode=qstatus&output=xml&apikey=$apiKey" -ErrorVariable $webErr
+  }
+  catch{
+    Write-Output "The following error occured: $webErr"
+  }
 
   Foreach ($job in $rawQueueDetails.queue.jobs.job)
   {
     $properties=[ordered]@{
       "Size (MB)"=[math]::Round($job.mb);
       "Remaining (MB)"=[math]::Round($job.mbleft);
-      "Completed (%)"=[math]::Round(($job.mbleft / $job.mb) * 100) 
+      "Completed (%)"=[math]::Round(100 - (($job.mbleft / $job.mb) * 100)) 
       "FileName"=$job.filename;
     }
 
-    $object = New-Object -TypeName psobject -Property $properties
+    $Queue += New-Object -TypeName psobject -Property $properties
 
-    $Queue += $object
   }
 
   if ($ExcludeCompleted){
@@ -24,7 +29,5 @@ function Get-SABQueueList ($hostname, $apikey, [switch]$ExcludeCompleted) {
     $Queue
   }
 }
-
-
 
 Export-ModuleMember -Function 'Get-*'
