@@ -15,6 +15,28 @@ Copy the module to you `$env:PSModulePath` and load with:
 
 ## Functions
 
+Get-SABQueueTotals
+
+### Get-SABQueueTotals
+
+Return statistics about the whole queue. Use the syntax:
+
+`Get-SABQueueTotals -Hostname xxx.com.au:8080 -apikey 33697778f6821f9895d99bf599e5d04a -ExcludeCompleted`
+
+`-Hostname` - Provide the hostname and port of your servers web interface
+
+`-apikey` - Provide the API key generated from the SAB configuration menu
+
+#### Example output
+
+```
+No. Downloads        : 7
+Speed (KB/s)         : 5724
+Total (MB)           : 13325
+Total Remaining (MB) : 12374
+Completed (%)        : 7
+```
+
 ### Get-SABQueueList
 
 Gets a list of the queued items in your SAB installation. Use the syntax:
