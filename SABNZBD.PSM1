@@ -17,7 +17,7 @@ function Get-SABQueueList () {
         [string]$hostname, 
         [parameter(Mandatory = $true)]
         [string]$apikey,
-        [bool]$ExcludeCompleted
+        [switch]$ExcludeCompleted
     )
 
     $Queue = @()

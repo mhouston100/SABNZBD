@@ -1,7 +1,9 @@
 # SABNZDB
-Some Powershell modules for working with SABNZDB. I needed a non-production project to help me learn GIT so here is some functions that may be helpful.
+A Powershell module for working with your SABNZBD queue.
 
-You will need to configure and provide a SABNzbd API key from the web interface.
+https://sabnzbd.org/
+
+This module allows you to pull queue information into Powershell objects and manipulate the queue/slots.
 
 # Usage
 
