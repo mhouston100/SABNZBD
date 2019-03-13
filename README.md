@@ -1,5 +1,5 @@
 # SABNZDB
-A Powershell module for working with your SABNZBD queue.
+A Powershell module for working with your SABNZBD instance.
 
 https://sabnzbd.org/
 
@@ -43,3 +43,13 @@ Remaining (MB) Size (MB) Completed (%) FileName
            176      2293             8 xxxxxxxxxxxxxxxx.S02E10.1080p.WEB-DL.DD5.1.H.264
             65      2234             3 xxxxxxxxxxxxxxxx.2014.S02E09.1080p.WEB-DL.DD5.1.H.264
 ```
+
+### Get-SABRawQueue
+
+Returns the raw queue data from SABNZBD. This function can be called directly, but is generally used by other functions internally. Use the syntax:
+
+`Get-SABRawQueue -Hostname xxx.com.au:8080 -apikey 33697778f6821f9895d99bf599e5d04a -ExcludeCompleted`
+
+`-Hostname` - Provide the hostname and port of your servers web interface
+
+`-apikey` - Provide the API key generated from the SAB configuration menu
