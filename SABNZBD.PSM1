@@ -1,4 +1,10 @@
 Function Get-SABRawQueue () {
+    <#
+       .Description
+       The Get-SABRawQueue pulls the raw queue data from the SABNZBD rest interface.
+       You can call this function directly but it is used by other functions to pull data.
+    #>
+
     Param(
         [parameter(Mandatory = $true)]
         [string]$hostname, 
@@ -12,6 +18,10 @@ Function Get-SABRawQueue () {
 } # End Function Get-SABRawQueue
 
 function Get-SABQueueList () {
+    <#
+       .Description
+       The Get-SABQueueList returns a formatted list of slots currently in the queue. Use the ExcludeCompleted switch to only show active slots.
+    #>
     Param(
         [parameter(Mandatory = $true)]
         [string]$hostname, 
@@ -47,6 +57,10 @@ function Get-SABQueueList () {
 } # End Function Get-SABQueueList
 
 function Get-SABQueueTotals () {
+    <#
+       .Description
+       The Get-SABQueueTotals returns statistics for the entire queue.
+    #>
     Param(
         [parameter(Mandatory = $true)]
         [string]$hostname, 
@@ -71,6 +85,11 @@ function Get-SABQueueTotals () {
 } # End Function Get-SABQueueTotals
 
 function Set-SABQueueStatus () {
+    <#
+       .Description
+       The Get-SABQueueStatus function is used to control the status of the queue as a whole.
+       Use this function to pause or resume the queue. If Pausing, you can set a time (in minutes) that the queue should be paused for.
+    #>
     Param(
         [parameter(Mandatory = $true)]
         [string]$hostname, 
@@ -107,6 +126,8 @@ function Set-SABSlotStatus () {
         [parameter(Mandatory = $true)]
         [string]$apikey
     )
+
+    # Not Implemented Yet
 }
 
 Export-ModuleMember -Function *
