@@ -1,16 +1,29 @@
-Function Get-SABRawQueue ($hostname, $apikey) {
+Function Get-SABRawQueue () {
+    Param(
+        [parameter(Mandatory = $true)]
+        [string]$hostname, 
+        [parameter(Mandatory = $true)]
+        [string]$apikey
+    )
+
     $curError = $null
     $URI = "http://$hostName/api?mode=queue&output=json&apikey=$apiKey" 
     (Invoke-RestMethod -URI $URI -ErrorVariable $curError -ErrorAction Stop).queue
-
 } # End Function Get-SABRawQueue
 
-function Get-SABQueueList ([string]$hostname, [string]$apikey, [switch]$ExcludeCompleted) {
+function Get-SABQueueList () {
+    Param(
+        [parameter(Mandatory = $true)]
+        [string]$hostname, 
+        [parameter(Mandatory = $true)]
+        [string]$apikey,
+        [bool]$ExcludeCompleted
+    )
 
     $Queue = @()
   
     $rawQueue = Get-SABRawQueue $hostname $apikey
-    
+
     if ($rawQueue.Error) {Write-Output "The following error occured : $($rawQueue.Error)"; return} # End If
 
     Foreach ($job in ($rawQueue).slots) {
@@ -33,7 +46,13 @@ function Get-SABQueueList ([string]$hostname, [string]$apikey, [switch]$ExcludeC
     }
 } # End Function Get-SABQueueList
 
-function Get-SABQueueTotals ([string]$hostname, [string]$apikey) {
+function Get-SABQueueTotals () {
+    Param(
+        [parameter(Mandatory = $true)]
+        [string]$hostname, 
+        [parameter(Mandatory = $true)]
+        [string]$apikey
+    )
 
     $rawQueue = Get-SABRawQueue $hostname $apikey
 
@@ -50,6 +69,45 @@ function Get-SABQueueTotals ([string]$hostname, [string]$apikey) {
 
     $totals
 } # End Function Get-SABQueueTotals
+
+function Set-SABQueueStatus () {
+    Param(
+        [parameter(Mandatory = $true)]
+        [string]$hostname, 
+        [parameter(Mandatory = $true)]
+        [string]$apikey,
+        [parameter(Mandatory = $true)]
+        [ValidateSet("Pause", "Resume")] 
+        [string]$status,
+        [int]$minutes
+    )
+    switch ($status) {
+        "Pause" {
+            If ($minutes) {
+                $URI = "http://$hostName/api?mode=config&name=set_pause&value=$minutes&apikey=$apiKey" 
+                Invoke-RestMethod -URI $URI -ErrorVariable $curError -ErrorAction Stop
+
+            }
+            else {
+                $URI = "http://$hostName/api?mode=pause&apikey=$apiKey" 
+                Invoke-RestMethod -URI $URI -ErrorVariable $curError -ErrorAction Stop
+            } # End If
+        }
+        "Resume" {
+            $URI = "http://$hostName/api?mode=resume&apikey=$apiKey" 
+            Invoke-RestMethod -URI $URI -ErrorVariable $curError -ErrorAction Stop
+        }
+    } # End Switch
+} # End Function Set-SABQueueStatus
+
+function Set-SABSlotStatus () {
+    Param(
+        [parameter(Mandatory = $true)]
+        [string]$hostname, 
+        [parameter(Mandatory = $true)]
+        [string]$apikey
+    )
+}
 
 Export-ModuleMember -Function *
 
