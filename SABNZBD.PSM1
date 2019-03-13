@@ -69,4 +69,4 @@ function Get-SABQueueTotals ([string]$hostname, [string]$apikey){
   $totals
 } # End Function Get-SABQueueTotals
 
-Export-ModuleMember -Function 'Get-*'
+Export-ModuleMember -Function *
