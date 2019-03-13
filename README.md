@@ -15,8 +15,6 @@ Copy the module to you `$env:PSModulePath` and load with:
 
 ## Functions
 
-Get-SABQueueTotals
-
 ### Get-SABQueueTotals
 
 Return statistics about the whole queue. Use the syntax:
