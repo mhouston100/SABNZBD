@@ -5,9 +5,7 @@ https://sabnzbd.org/
 
 This module allows you to pull queue information into Powershell objects and manipulate the queue/slots.
 
-Basically, this is a PS Module frontend to the REST API provided by SABNZBD. To use this item you will need to generate an API key in your SABNZBD instance:
-
-`Settings --> General --> Security --> API Key`
+Basically, this is a PS Module frontend to the REST API provided by SABNZBD. 
 
 # Usage
 
