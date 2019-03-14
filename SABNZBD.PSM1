@@ -145,6 +145,9 @@ function Set-SABSpeedLimit () {
         [string]$value
     )
 
+    # I've implemented this but it doesnt look like it works.
+    # API returns OK but setting is not changed.
+
     switch ($psCmdlet.ParameterSetName) {
         "ByPercentage" {
             $URI = "http://$hostName/api?mode=config&name=speedlimit&value=$percentage&apikey=$apiKey" 
