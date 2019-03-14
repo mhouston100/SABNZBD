@@ -11,6 +11,12 @@ Basically, this is a PS Module frontend to the REST API provided by SABNZBD. To 
 
 # Usage
 
+## SABNZBD Configration
+
+To use this item you will need to generate an API key in your SABNZBD instance:
+
+`Settings --> General --> Security --> API Key`
+
 ## Module
 
 Copy the module to you `$env:PSModulePath` and load with:
