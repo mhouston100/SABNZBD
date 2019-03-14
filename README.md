@@ -15,11 +15,25 @@ Copy the module to you `$env:PSModulePath` and load with:
 
 ## Functions
 
+### Set-SABQueueStatus
+
+Manipulate the status of the whole queue. Use this function to pause or resume all slots in the queue. Use the syntax:
+
+`Set-SABQueueStatus -Hostname xxx.com.au:8080 -apikey 33697778f6821f9895d99bf599e5d04a -status Paused -Minutes 60`
+
+`-Hostname` - Provide the hostname and port of your servers web interface
+
+`-apikey` - Provide the API key generated from the SAB configuration menu
+
+`-status` - Provide the status action, either `Pause` or `Resume`
+
+`-minutes` - If pausing the queue you can provide a number of minutes to pause. If not provided the queue is paused indefinitely (unless manually resumed)
+
 ### Get-SABQueueTotals
 
 Return statistics about the whole queue. Use the syntax:
 
-`Get-SABQueueTotals -Hostname xxx.com.au:8080 -apikey 33697778f6821f9895d99bf599e5d04a -ExcludeCompleted`
+`Get-SABQueueTotals -Hostname xxx.com.au:8080 -apikey 33697778f6821f9895d99bf599e5d04a`
 
 `-Hostname` - Provide the hostname and port of your servers web interface
 
