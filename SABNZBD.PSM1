@@ -148,11 +148,11 @@ function Set-SABSpeedLimit () {
     switch ($psCmdlet.ParameterSetName) {
         "ByPercentage" {
             $URI = "http://$hostName/api?mode=config&name=speedlimit&value=$percentage&apikey=$apiKey" 
-            (Invoke-RestMethod -URI $URI -ErrorVariable $curError -ErrorAction Stop).queue
+            Invoke-RestMethod -URI $URI -ErrorVariable $curError -ErrorAction Stop
         }
         "ByValue" {
             $URI = "http://$hostName/api?mode=config&name=speedlimit&value=$value&apikey=$apiKey" 
-            (Invoke-RestMethod -URI $URI -ErrorVariable $curError -ErrorAction Stop).queue
+            Invoke-RestMethod -URI $URI -ErrorVariable $curError -ErrorAction Stop
         }
 
 
