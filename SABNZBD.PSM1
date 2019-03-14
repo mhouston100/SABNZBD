@@ -136,12 +136,26 @@ function Set-SABSpeedLimit () {
       [string]$hostname, 
       [parameter(Mandatory = $true)]
       [string]$apikey,
+      [parameter(Mandatory=$true,
+      ParameterSetName="ByPercentage")]
       [int]$percentage,
+      [parameter(Mandatory=$true,
+      ParameterSetName="ByValue")]
       [ValidatePattern("^[1-9][0-9]*[mkMK]$")] 
       [string]$value
   )
 
-  # Not Implemented Yet
+  switch ($psCmdlet.ParameterSetName) {
+"ByPercentage" {
+    $URI = "http://$hostName/api?mode=config&name=speedlimit&value=$percentage&apikey=$apiKey" 
+    (Invoke-RestMethod -URI $URI -ErrorVariable $curError -ErrorAction Stop).queue
+  }
+  "ByValue" {
+    $URI = "http://$hostName/api?mode=config&name=speedlimit&value=$value&apikey=$apiKey" 
+    (Invoke-RestMethod -URI $URI -ErrorVariable $curError -ErrorAction Stop).queue
+  }
+
+
 }
 
 Export-ModuleMember -Function *
