@@ -92,7 +92,9 @@ Set the current queue speed limit either by percentage or value (M or K). To use
 
 `Settings --> General --> Tuning --> Maximum Line Speed`
 
-Once this is set, the percentage is based off this number.
+Once this is set, the percentage is based off this number. Setting by the 'value' will apply this new limit to the current queue. It will not change the default setting in the configuration file.
+
+This function is used to temporarily adjust speed for the current queue.
 
  Use the syntax:
 
