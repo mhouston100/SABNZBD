@@ -130,5 +130,19 @@ function Set-SABSlotStatus () {
     # Not Implemented Yet
 }
 
+function Set-SABSpeedLimit () {
+  Param(
+      [parameter(Mandatory = $true)]
+      [string]$hostname, 
+      [parameter(Mandatory = $true)]
+      [string]$apikey,
+      [int]$percentage,
+      [ValidatePattern("^[1-9][0-9]*[mkMK]$")] 
+      [string]$value
+  )
+
+  # Not Implemented Yet
+}
+
 Export-ModuleMember -Function *
 
