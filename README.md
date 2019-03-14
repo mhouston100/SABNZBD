@@ -86,6 +86,26 @@ Remaining (MB) Size (MB) Completed (%) FileName
             65      2234             3 xxxxxxxxxxxxxxxx.2014.S02E09.1080p.WEB-DL.DD5.1.H.264
 ```
 
+### Set-SABSpeedLimit
+
+Set the current queue speed limit either by percentage or value (M or K). To use this function you must set a global speed limit in the SABNZBD config under:
+
+`Settings --> General --> Tuning --> Maximum Line Speed`
+
+Once this is set, the percentage is based off this number.
+
+ Use the syntax:
+
+`Set-SABSpeedLimit -Hostname xxx.com.au:8080 -apikey 33697778f6821f9895d99bf599e5d04a -Percentage 50 (-value 100M)`
+
+`-Hostname` - Provide the hostname and port of your servers web interface
+
+`-apikey` - Provide the API key generated from the SAB configuration menu
+
+`-Percentage` - Set current speed as percentage of global line speed setting
+
+`-value` - Set the current speed to a direct value, either M (megabyte) or K (Kilobyte)
+
 ### Get-SABRawQueue
 
 Returns the raw queue data from SABNZBD. This function can be called directly, but is generally used by other functions internally. Use the syntax:
