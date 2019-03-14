@@ -131,6 +131,11 @@ function Set-SABSlotStatus () {
 }
 
 function Set-SABSpeedLimit () {
+      <#
+       .Description
+       The Get-SABSpeedLimit sets teh current queue speed using either a set speed (M or K) or a percentage.
+       To use this function you need to have set a global speed limit in the SABNZBD instance config.
+    #>
     Param(
         [parameter(Mandatory = $true)]
         [string]$hostname, 
@@ -144,9 +149,6 @@ function Set-SABSpeedLimit () {
         [ValidatePattern("^[1-9][0-9]*[mkMK]$")] 
         [string]$value
     )
-
-    # I've implemented this but it doesnt look like it works.
-    # API returns OK but setting is not changed.
 
     switch ($psCmdlet.ParameterSetName) {
         "ByPercentage" {
